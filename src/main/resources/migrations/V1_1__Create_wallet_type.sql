@@ -1,0 +1,6 @@
+CREATE TYPE IF NOT EXISTS wallet_type AS ENUM (
+    'CASH',
+    'BANK_ACCOUNT',
+    'MOBILE_MONEY',
+    'CRYPTO'
+);

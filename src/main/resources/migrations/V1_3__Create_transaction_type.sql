@@ -1,0 +1,1 @@
+CREATE TYPE IN NOT EXISTS transaction_type AS ENUM ('IN', 'OUT');
