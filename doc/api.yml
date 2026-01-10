@@ -77,8 +77,75 @@ paths:
               schema:
                 $ref: "#/components/schemas/Wallet"
 
+  /transaction/category:
+    get:
+      operationId: getAllTransactionCategory
+      description: "Gets all transaction categories"
+      tags:
+        - Category
+      responses:
+        "200":
+          description: "All categories"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionCategory"
+    post:
+      operationId: createTransactionCategory
+      description: "Creates new transaction categories"
+      tags:
+        - Category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TransactionCategoryMinimalInfo"
+      responses:
+        "201":
+          description: "Transaction categories created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionCategory"
+
 components:
   schemas:
+    TransactionCategory:
+      allOf:
+        - $ref: "#/components/schemas/TransactionCategoryMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+        - $ref: "#/components/schemas/WithUpdatedAt"
+
+    TransactionCategoryMinimalInfo:
+      type: object
+      properties:
+        transactionType:
+          $ref: "#/components/schemas/TransactionType"
+        name:
+          type: string
+          example: "MAIN"
+        reference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME"
+        description:
+          type: string
+          example: "Main income"
+
+    TransactionType:
+      type: string
+      enum:
+        - IN
+        - OUT
+      default: OUT
+
     Wallet:
       allOf:
         - $ref: "#/components/schemas/WalletMinimalInfo"
@@ -112,6 +179,13 @@ components:
         id:
           type: string
           example: "6c64d77c-8654-4495-80bd-2b154b0289a8"
+
+    WithUpdatedAt:
+      type: object
+      properties:
+        updatedAt:
+          type: string
+          format: datetime
 
     WithCreatedAt:
       type: object
