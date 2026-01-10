@@ -1,13 +1,12 @@
 package vendredi.soir.posu.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.Instant;
 
 @Entity
 @Getter
@@ -15,18 +14,17 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Wallet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
 
-    private String name;
+  private String name;
 
-    @Column(unique = true, nullable = false)
-    private String reference;
+  @Column(unique = true, nullable = false)
+  private String reference;
 
-    @Enumerated(EnumType.STRING)
-    private WalletType type;
+  @Enumerated(EnumType.STRING)
+  private WalletType type;
 
-    @CreationTimestamp
-    private Instant createdAt;
+  @CreationTimestamp private Instant createdAt;
 }

@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 import vendredi.soir.posu.model.Transaction;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, String> {
-}
+public interface TransactionRepository extends JpaRepository<Transaction, String> {}
