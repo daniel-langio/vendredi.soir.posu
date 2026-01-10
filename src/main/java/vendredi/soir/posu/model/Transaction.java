@@ -1,6 +1,7 @@
 package vendredi.soir.posu.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,36 +9,32 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.Instant;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
 
-    private Instant date;
+  private Instant date;
 
-    @Enumerated(EnumType.STRING)
-    private TransactionType transactionType;
+  @Enumerated(EnumType.STRING)
+  private TransactionType transactionType;
 
-    private String walletReference;
+  private String walletReference;
 
-    private Double amount;
+  private Double amount;
 
-    private String categoryReference;
+  private String categoryReference;
 
-    private String subCategoryReference;
+  private String subCategoryReference;
 
-    private String description;
+  private String description;
 
-    @CreationTimestamp
-    private Instant createdAt;
+  @CreationTimestamp private Instant createdAt;
 
-    @UpdateTimestamp
-    private Instant updatedAt;
+  @UpdateTimestamp private Instant updatedAt;
 }
