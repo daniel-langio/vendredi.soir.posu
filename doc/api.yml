@@ -7,6 +7,8 @@ info:
 paths:
   /ping:
     get:
+      operationId: ping
+      description: Just a dumb endpoint that return pong (for now ;])
       tags:
         - Health
       responses:
@@ -20,6 +22,8 @@ paths:
 
   /health/email:
     get:
+      operationId: checkMailerHealth
+      description: send emails for testing
       tags:
         - Email
       parameters:
@@ -37,9 +41,85 @@ paths:
               schema:
                 $ref: "#/components/schemas/ResponseOK"
 
+  /wallet:
+    post:
+      operationId: createWallet
+      description: Creates new wallets
+      tags:
+        - Wallet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/WalletMinimalInfo"
+      responses:
+        "201":
+          description: "Wallet(s) created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Wallet"
+        "409":
+          description: "One or multiple given references already exists"
+    get:
+      operationId: getAllWallet
+      description: "Returns all existing callet"
+      responses:
+        "200":
+          description: "All wallets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wallet"
 
 components:
   schemas:
+    Wallet:
+      allOf:
+        - $ref: "#/components/schemas/WalletMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+
+    WalletMinimalInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Bank Of Danniville Account"
+        reference:
+          type: string
+          example: "BODV-0000"
+        type:
+          $ref: "#/components/schemas/WalletType"
+
+    WalletType:
+      type: string
+      enum:
+        - CASH
+        - BANK_ACCOUNT
+        - MOBILE_MONEY
+        - CRYPTO
+      default: CASH
+
+    WithId:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "6c64d77c-8654-4495-80bd-2b154b0289a8"
+
+    WithCreatedAt:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: datetime
+
     ResponseOK:
       type: string
       example: "OK"
