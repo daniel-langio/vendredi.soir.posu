@@ -77,6 +77,44 @@ paths:
               schema:
                 $ref: "#/components/schemas/Wallet"
 
+  /transaction:
+    get:
+      operationId: getAllTransaction
+      description: "Gets All transaction"
+      tags:
+        - Transaction
+      responses:
+        "200":
+          description: "All transaction"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+    post:
+      operationId: recordTransactions
+      description: "Records a given list of transaction"
+      tags:
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TransactionMinimalInfo"
+      responses:
+        "201":
+          description: "Transactions created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+
   /transaction/category:
     get:
       operationId: getAllTransactionCategory
@@ -155,6 +193,37 @@ paths:
 
 components:
   schemas:
+    Transaction:
+      allOf:
+        - $ref: "#/components/schemas/TransactionMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+        - $ref: "#/components/schemas/WithUpdatedAt"
+
+    TransactionMinimalInfo:
+      type: object
+      properties:
+        date:
+          type: string
+          format: datetime
+        transactionType:
+          $ref: "#/components/schemas/TransactionType"
+        walletReference:
+          type: string
+          example: "BODV-0000"
+        amount:
+          type: number
+          example: 2000000
+        categoryReference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME"
+        subCategoryReference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME_SOURCE"
+        description:
+          type: string
+          example: "end of 2025 income"
+
     TransactionSubCategory:
       allOf:
         - $ref: "#/components/schemas/TransactionSubCategoryMinimalInfo"
