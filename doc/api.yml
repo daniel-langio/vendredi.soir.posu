@@ -1,0 +1,45 @@
+openapi: 3.0.3
+info:
+  title: Posu API
+  description: |
+    Financial event recording api.
+  version: "0.0.1"
+paths:
+  /ping:
+    get:
+      tags:
+        - Health
+      responses:
+        "200":
+          description: "ping pong"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "pong"
+
+  /health/email:
+    get:
+      tags:
+        - Email
+      parameters:
+        - in: query
+          name: to
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseOK"
+
+
+components:
+  schemas:
+    ResponseOK:
+      type: string
+      example: "OK"
