@@ -115,8 +115,69 @@ paths:
                 items:
                   $ref: "#/components/schemas/TransactionCategory"
 
+  /transaction/subcategory:
+    get:
+      operationId: getAllTransactionSubCategory
+      description: "Gets all transaction sub-categories"
+      tags:
+        - SubCategory
+      responses:
+        "200":
+          description: "All sub-categories"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionSubCategory"
+    post:
+      operationId: createTransactionSubCategories
+      description: "Creates new transaction sub-categories"
+      tags:
+        - SubCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TransactionSubCategoryMinimalInfo"
+      responses:
+        "201":
+          description: "Transaction sub-categories created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionCategory"
+
 components:
   schemas:
+    TransactionSubCategory:
+      allOf:
+        - $ref: "#/components/schemas/TransactionSubCategoryMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+        - $ref: "#/components/schemas/WithUpdatedAt"
+
+    TransactionSubCategoryMinimalInfo:
+      type: object
+      properties:
+        categoryReference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME_SOURCE"
+        name:
+          type: string
+          example: "Salary"
+        reference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME"
+        description:
+          type: string
+          example: "Primary salary or main income source"
+
     TransactionCategory:
       allOf:
         - $ref: "#/components/schemas/TransactionCategoryMinimalInfo"
