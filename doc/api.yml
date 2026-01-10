@@ -1,0 +1,329 @@
+openapi: 3.0.3
+info:
+  title: Posu API
+  description: |
+    Financial event recording api.
+  version: "0.0.1"
+paths:
+  /ping:
+    get:
+      operationId: ping
+      description: Just a dumb endpoint that return pong (for now ;])
+      tags:
+        - Health
+      responses:
+        "200":
+          description: "ping pong"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "pong"
+
+  /health/email:
+    get:
+      operationId: checkMailerHealth
+      description: send emails for testing
+      tags:
+        - Email
+      parameters:
+        - in: query
+          name: to
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseOK"
+
+  /wallet:
+    post:
+      operationId: createWallet
+      description: Creates new wallets
+      tags:
+        - Wallet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/WalletMinimalInfo"
+      responses:
+        "201":
+          description: "Wallet(s) created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Wallet"
+        "409":
+          description: "One or multiple given references already exists"
+    get:
+      operationId: getAllWallet
+      description: "Returns all existing callet"
+      responses:
+        "200":
+          description: "All wallets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wallet"
+
+  /transaction:
+    get:
+      operationId: getAllTransaction
+      description: "Gets All transaction"
+      tags:
+        - Transaction
+      responses:
+        "200":
+          description: "All transaction"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+    post:
+      operationId: recordTransactions
+      description: "Records a given list of transaction"
+      tags:
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TransactionMinimalInfo"
+      responses:
+        "201":
+          description: "Transactions created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+
+  /transaction/category:
+    get:
+      operationId: getAllTransactionCategory
+      description: "Gets all transaction categories"
+      tags:
+        - Category
+      responses:
+        "200":
+          description: "All categories"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionCategory"
+    post:
+      operationId: createTransactionCategory
+      description: "Creates new transaction categories"
+      tags:
+        - Category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TransactionCategoryMinimalInfo"
+      responses:
+        "201":
+          description: "Transaction categories created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionCategory"
+
+  /transaction/subcategory:
+    get:
+      operationId: getAllTransactionSubCategory
+      description: "Gets all transaction sub-categories"
+      tags:
+        - SubCategory
+      responses:
+        "200":
+          description: "All sub-categories"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionSubCategory"
+    post:
+      operationId: createTransactionSubCategories
+      description: "Creates new transaction sub-categories"
+      tags:
+        - SubCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TransactionSubCategoryMinimalInfo"
+      responses:
+        "201":
+          description: "Transaction sub-categories created"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionCategory"
+
+components:
+  schemas:
+    Transaction:
+      allOf:
+        - $ref: "#/components/schemas/TransactionMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+        - $ref: "#/components/schemas/WithUpdatedAt"
+
+    TransactionMinimalInfo:
+      type: object
+      properties:
+        date:
+          type: string
+          format: datetime
+        transactionType:
+          $ref: "#/components/schemas/TransactionType"
+        walletReference:
+          type: string
+          example: "BODV-0000"
+        amount:
+          type: number
+          example: 2000000
+        categoryReference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME"
+        subCategoryReference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME_SOURCE"
+        description:
+          type: string
+          example: "end of 2025 income"
+
+    TransactionSubCategory:
+      allOf:
+        - $ref: "#/components/schemas/TransactionSubCategoryMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+        - $ref: "#/components/schemas/WithUpdatedAt"
+
+    TransactionSubCategoryMinimalInfo:
+      type: object
+      properties:
+        categoryReference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME_SOURCE"
+        name:
+          type: string
+          example: "Salary"
+        reference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME"
+        description:
+          type: string
+          example: "Primary salary or main income source"
+
+    TransactionCategory:
+      allOf:
+        - $ref: "#/components/schemas/TransactionCategoryMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+        - $ref: "#/components/schemas/WithUpdatedAt"
+
+    TransactionCategoryMinimalInfo:
+      type: object
+      properties:
+        transactionType:
+          $ref: "#/components/schemas/TransactionType"
+        name:
+          type: string
+          example: "MAIN"
+        reference:
+          type: string
+          example: "DEFAULT_MAIN_INCOME"
+        description:
+          type: string
+          example: "Main income"
+
+    TransactionType:
+      type: string
+      enum:
+        - IN
+        - OUT
+      default: OUT
+
+    Wallet:
+      allOf:
+        - $ref: "#/components/schemas/WalletMinimalInfo"
+        - $ref: "#/components/schemas/WithId"
+        - $ref: "#/components/schemas/WithCreatedAt"
+
+    WalletMinimalInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Bank Of Danniville Account"
+        reference:
+          type: string
+          example: "BODV-0000"
+        type:
+          $ref: "#/components/schemas/WalletType"
+
+    WalletType:
+      type: string
+      enum:
+        - CASH
+        - BANK_ACCOUNT
+        - MOBILE_MONEY
+        - CRYPTO
+      default: CASH
+
+    WithId:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "6c64d77c-8654-4495-80bd-2b154b0289a8"
+
+    WithUpdatedAt:
+      type: object
+      properties:
+        updatedAt:
+          type: string
+          format: datetime
+
+    WithCreatedAt:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: datetime
+
+    ResponseOK:
+      type: string
+      example: "OK"
