@@ -68,7 +68,7 @@ paths:
           description: "One or multiple given references already exists"
     get:
       operationId: getAllWallet
-      description: "Returns all existing callet"
+      description: "Returns all existing wallet"
       responses:
         "200":
           description: "All wallets"
