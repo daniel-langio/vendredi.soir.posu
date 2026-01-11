@@ -8,12 +8,7 @@ import vendredi.soir.posu.model.Wallet;
 public class WalletMapper {
 
   public Wallet toDomain(WalletMinimalInfo rest) {
-    return new Wallet(
-        null,
-        rest.getName(),
-        rest.getReference(),
-        toDomain(rest.getType()),
-        null);
+    return new Wallet(null, rest.getName(), rest.getReference(), toDomain(rest.getType()), null);
   }
 
   public vendredi.soir.posu.endpoint.rest.model.Wallet toRest(Wallet domain) {

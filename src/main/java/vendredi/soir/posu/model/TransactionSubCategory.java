@@ -20,10 +20,7 @@ public class TransactionSubCategory {
   private String id;
 
   @ManyToOne(optional = false)
-  @JoinColumn(
-      name = "category_id",
-      referencedColumnName = "id"
-  )
+  @JoinColumn(name = "category_id", referencedColumnName = "id")
   private TransactionCategory category;
 
   private String name;
