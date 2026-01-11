@@ -19,7 +19,12 @@ public class TransactionSubCategory {
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
 
-  private String categoryReference;
+  @ManyToOne(optional = false)
+  @JoinColumn(
+      name = "category_id",
+      referencedColumnName = "id"
+  )
+  private TransactionCategory category;
 
   private String name;
 
@@ -31,4 +36,8 @@ public class TransactionSubCategory {
   @CreationTimestamp private Instant createdAt;
 
   @UpdateTimestamp private Instant updatedAt;
+
+  public String getCategoryReference() {
+    return this.category.getReference();
+  }
 }
