@@ -10,14 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class Transaction {
+public class Label {
   private String id;
-  private Instant date;
-  private TransactionType transactionType;
-  private String walletReference;
-  private double amount;
-  private java.util.List<Label> labels;
-  private String description;
+  private String name;
+  private String reference;
   private Instant createdAt;
   private Instant updatedAt;
 }

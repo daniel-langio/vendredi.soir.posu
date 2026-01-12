@@ -1,6 +1,10 @@
 package vendredi.soir.posu.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,20 +18,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionCategory {
+public class Label {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
-
-  @Enumerated(EnumType.STRING)
-  private TransactionType transactionType;
 
   private String name;
 
   @Column(unique = true, nullable = false)
   private String reference;
-
-  private String description;
 
   @CreationTimestamp private Instant createdAt;
 

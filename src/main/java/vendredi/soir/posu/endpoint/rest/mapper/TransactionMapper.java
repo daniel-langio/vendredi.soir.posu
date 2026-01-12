@@ -1,11 +1,18 @@
 package vendredi.soir.posu.endpoint.rest.mapper;
 
+import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import vendredi.soir.posu.endpoint.rest.model.TransactionMinimalInfo;
 import vendredi.soir.posu.model.Transaction;
+import vendredi.soir.posu.repository.LabelRepository;
 
 @Component
+@AllArgsConstructor
 public class TransactionMapper {
+  private final LabelRepository labelRepository;
+  private final LabelMapper labelMapper;
+
   public Transaction toDomain(TransactionMinimalInfo rest) {
     return new Transaction(
         null,
@@ -13,8 +20,14 @@ public class TransactionMapper {
         toDomain(rest.getTransactionType()),
         rest.getWalletReference(),
         rest.getAmount(),
-        rest.getCategoryReference(),
-        rest.getSubCategoryReference(),
+        rest.getLabels().stream()
+            .map(
+                label ->
+                    labelRepository
+                        .findByReference(label)
+                        .orElseThrow(
+                            () -> new IllegalArgumentException("Label not found: " + label)))
+            .collect(Collectors.toList()),
         rest.getDescription(),
         null,
         null);
@@ -27,8 +40,7 @@ public class TransactionMapper {
         toRest(domain.getTransactionType()),
         domain.getWalletReference(),
         domain.getAmount(),
-        domain.getCategoryReference(),
-        domain.getSubCategoryReference(),
+        domain.getLabels().stream().map(labelMapper::toRest).collect(Collectors.toList()),
         domain.getDescription(),
         domain.getCreatedAt(),
         domain.getUpdatedAt());

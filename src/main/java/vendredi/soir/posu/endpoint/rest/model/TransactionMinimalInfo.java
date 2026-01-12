@@ -15,7 +15,6 @@ public class TransactionMinimalInfo {
   private TransactionType transactionType;
   private String walletReference;
   private double amount;
-  private String categoryReference;
-  private String subCategoryReference;
+  private java.util.List<String> labels;
   private String description;
 }
