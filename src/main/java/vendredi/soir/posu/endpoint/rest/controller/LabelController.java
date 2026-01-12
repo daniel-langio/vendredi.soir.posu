@@ -30,8 +30,6 @@ public class LabelController {
   @GetMapping
   public ResponseEntity<List<Label>> getAllLabels() {
     return ResponseEntity.ok(
-        labelService.getAllLabels().stream()
-            .map(labelMapper::toRest)
-            .collect(Collectors.toList()));
+        labelService.getAllLabels().stream().map(labelMapper::toRest).collect(Collectors.toList()));
   }
 }
