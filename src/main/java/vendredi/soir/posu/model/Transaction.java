@@ -28,9 +28,14 @@ public class Transaction {
 
   private Double amount;
 
-  private String categoryReference;
-
-  private String subCategoryReference;
+  @ManyToMany(
+      fetch = FetchType.LAZY,
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+      name = "transaction_label",
+      joinColumns = @JoinColumn(name = "transaction_id"),
+      inverseJoinColumns = @JoinColumn(name = "label_id"))
+  private java.util.List<Label> labels;
 
   private String description;
 
