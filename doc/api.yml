@@ -41,12 +41,52 @@ paths:
               schema:
                 $ref: "#/components/schemas/ResponseOK"
 
+  /login:
+    post:
+      operationId: login
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithApiKey"
+
+  /register:
+    post:
+      operationId: register
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithApiKey"
+
   /wallet:
     post:
       operationId: createWallet
       description: Creates new wallets
       tags:
         - Wallet
+      security:
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -69,13 +109,19 @@ paths:
     get:
       operationId: getAllWallet
       description: "Returns all existing wallet"
+      tags:
+        - Wallet
+      security:
+        - ApiKeyAuth: []
       responses:
         "200":
           description: "All wallets"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Wallet"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Wallet"
 
   /transaction:
     get:
@@ -83,6 +129,8 @@ paths:
       description: "Gets All transaction"
       tags:
         - Transaction
+      security:
+        - ApiKeyAuth: []
       responses:
         "200":
           description: "All transaction"
@@ -97,6 +145,8 @@ paths:
       description: "Records a given list of transaction"
       tags:
         - Transaction
+      security:
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -115,26 +165,30 @@ paths:
                 items:
                   $ref: "#/components/schemas/Transaction"
 
-  /transaction/category:
+  /label:
     get:
-      operationId: getAllTransactionCategory
-      description: "Gets all transaction categories"
+      operationId: getAllLabels
+      description: "Gets all labels"
       tags:
-        - Category
+        - Label
+      security:
+        - ApiKeyAuth: []
       responses:
         "200":
-          description: "All categories"
+          description: "All labels"
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TransactionCategory"
+                  $ref: "#/components/schemas/Label"
     post:
-      operationId: createTransactionCategory
-      description: "Creates new transaction categories"
+      operationId: createLabels
+      description: "Creates new labels"
       tags:
-        - Category
+        - Label
+      security:
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -142,56 +196,24 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/TransactionCategoryMinimalInfo"
+                $ref: "#/components/schemas/LabelMinimalInfo"
       responses:
         "201":
-          description: "Transaction categories created"
+          description: "Labels created"
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TransactionCategory"
-
-  /transaction/subcategory:
-    get:
-      operationId: getAllTransactionSubCategory
-      description: "Gets all transaction sub-categories"
-      tags:
-        - SubCategory
-      responses:
-        "200":
-          description: "All sub-categories"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/TransactionSubCategory"
-    post:
-      operationId: createTransactionSubCategories
-      description: "Creates new transaction sub-categories"
-      tags:
-        - SubCategory
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/TransactionSubCategoryMinimalInfo"
-      responses:
-        "201":
-          description: "Transaction sub-categories created"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/TransactionCategory"
+                  $ref: "#/components/schemas/Label"
 
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
   schemas:
     Transaction:
       allOf:
@@ -199,13 +221,18 @@ components:
         - $ref: "#/components/schemas/WithId"
         - $ref: "#/components/schemas/WithCreatedAt"
         - $ref: "#/components/schemas/WithUpdatedAt"
+      properties:
+        labels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
 
     TransactionMinimalInfo:
       type: object
       properties:
         date:
           type: string
-          format: datetime
+          format: date-time
         transactionType:
           $ref: "#/components/schemas/TransactionType"
         walletReference:
@@ -214,60 +241,31 @@ components:
         amount:
           type: number
           example: 2000000
-        categoryReference:
-          type: string
-          example: "DEFAULT_MAIN_INCOME"
-        subCategoryReference:
-          type: string
-          example: "DEFAULT_MAIN_INCOME_SOURCE"
+        labels:
+          type: array
+          items:
+            type: string
+          example: ["FOOD", "RENT"]
         description:
           type: string
           example: "end of 2025 income"
 
-    TransactionSubCategory:
+    Label:
       allOf:
-        - $ref: "#/components/schemas/TransactionSubCategoryMinimalInfo"
+        - $ref: "#/components/schemas/LabelMinimalInfo"
         - $ref: "#/components/schemas/WithId"
         - $ref: "#/components/schemas/WithCreatedAt"
         - $ref: "#/components/schemas/WithUpdatedAt"
 
-    TransactionSubCategoryMinimalInfo:
+    LabelMinimalInfo:
       type: object
       properties:
-        categoryReference:
-          type: string
-          example: "DEFAULT_MAIN_INCOME_SOURCE"
         name:
           type: string
-          example: "Salary"
+          example: "Food"
         reference:
           type: string
-          example: "DEFAULT_MAIN_INCOME"
-        description:
-          type: string
-          example: "Primary salary or main income source"
-
-    TransactionCategory:
-      allOf:
-        - $ref: "#/components/schemas/TransactionCategoryMinimalInfo"
-        - $ref: "#/components/schemas/WithId"
-        - $ref: "#/components/schemas/WithCreatedAt"
-        - $ref: "#/components/schemas/WithUpdatedAt"
-
-    TransactionCategoryMinimalInfo:
-      type: object
-      properties:
-        transactionType:
-          $ref: "#/components/schemas/TransactionType"
-        name:
-          type: string
-          example: "MAIN"
-        reference:
-          type: string
-          example: "DEFAULT_MAIN_INCOME"
-        description:
-          type: string
-          example: "Main income"
+          example: "FOOD"
 
     TransactionType:
       type: string
@@ -303,6 +301,42 @@ components:
         - CRYPTO
       default: CASH
 
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+
+    UserWithApiKey:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - type: object
+          properties:
+            apiKey:
+              type: string
+
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    RegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
     WithId:
       type: object
       properties:
@@ -315,14 +349,14 @@ components:
       properties:
         updatedAt:
           type: string
-          format: datetime
+          format: date-time
 
     WithCreatedAt:
       type: object
       properties:
         createdAt:
           type: string
-          format: datetime
+          format: date-time
 
     ResponseOK:
       type: string
