@@ -29,19 +29,23 @@ FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
 # Copy the generated JAR from the build stage
-COPY --from=build /app/build/libs/*.jar app.jar
+# We use the explicit name to avoid issues with multiple JARs
+COPY --from=build /app/build/libs/posu.jar app.jar
 
-# Render uses the PORT environment variable. Spring Boot uses SERVER_PORT.
-ENV SERVER_PORT=${PORT:-8080}
+# Define build arguments to allow inserting environment variables during build
+ARG DATABASE_URL
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
 
-# Expose the default port
+# Set environment variables from build arguments
+# This satisfies the request to insert them into the docker image.
+# At runtime, these can still be overridden by Render's environment variables.
+ENV DATABASE_URL=$DATABASE_URL
+ENV DATABASE_USERNAME=$DATABASE_USERNAME
+ENV DATABASE_PASSWORD=$DATABASE_PASSWORD
+
+# Expose the default port (Render will use its own PORT)
 EXPOSE 8080
 
-# Environment variables for database connection (provided at runtime)
-# We do not use ARG to avoid baking sensitive information into the image layers.
-ENV DATABASE_URL=""
-ENV DATABASE_USERNAME=""
-ENV DATABASE_PASSWORD=""
-
-# Set the entrypoint to run the JAR
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Set the entrypoint to run the JAR, dynamically binding to Render's PORT
+ENTRYPOINT ["sh", "-c", "exec java -jar app.jar --server.port=${PORT:-8080}"]
