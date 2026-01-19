@@ -17,11 +17,12 @@ public class UserControllerIT extends FacadeIT {
   @Test
   void can_register() {
     String username = "testuser_" + java.util.UUID.randomUUID();
-    RegisterRequest request = RegisterRequest.builder()
-        .username(username)
-        .email(username + "@example.com")
-        .password("password")
-        .build();
+    RegisterRequest request =
+        RegisterRequest.builder()
+            .username(username)
+            .email(username + "@example.com")
+            .password("password")
+            .build();
     UserWithApiKey response = userController.register(request);
     assertNotNull(response.getId());
     assertEquals(username, response.getUsername());

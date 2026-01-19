@@ -25,6 +25,7 @@ public class Transaction {
 
   @Enumerated(EnumType.STRING)
   @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+  @Column(name = "type")
   private TransactionType transactionType;
 
   private String walletReference;
@@ -42,7 +43,9 @@ public class Transaction {
 
   private String description;
 
-  @CreationTimestamp private Instant createdAt;
+  @CreationTimestamp
+  @Column(name = "recorded_at")
+  private Instant createdAt;
 
   @UpdateTimestamp private Instant updatedAt;
 }

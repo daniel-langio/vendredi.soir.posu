@@ -43,7 +43,11 @@ public class UserService {
     Wallet defaultWallet =
         Wallet.builder()
             .name("default's " + user.getUsername() + " wallet")
-            .reference("DEFAULT_WALLET_" + user.getUsername().toUpperCase() + "_" + UUID.randomUUID().toString().substring(0, 8))
+            .reference(
+                "DEFAULT_WALLET_"
+                    + user.getUsername().toUpperCase()
+                    + "_"
+                    + UUID.randomUUID().toString().substring(0, 8))
             .type(WalletType.CASH)
             .users(List.of(user))
             .build();
