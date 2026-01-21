@@ -4,13 +4,15 @@ import org.springframework.stereotype.Component;
 import vendredi.soir.posu.endpoint.rest.model.WalletMinimalInfo;
 import vendredi.soir.posu.model.Wallet;
 
+import static java.util.UUID.randomUUID;
+
 @Component
 public class WalletMapper {
 
   public Wallet toDomain(WalletMinimalInfo rest) {
     return Wallet.builder()
         .name(rest.getName())
-        .reference(rest.getReference())
+        .reference(rest.getReference() + "-" + randomUUID())
         .type(toDomain(rest.getType()))
         .build();
   }

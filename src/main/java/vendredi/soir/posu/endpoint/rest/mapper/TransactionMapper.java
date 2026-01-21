@@ -7,6 +7,8 @@ import vendredi.soir.posu.endpoint.rest.model.TransactionMinimalInfo;
 import vendredi.soir.posu.model.Transaction;
 import vendredi.soir.posu.repository.LabelRepository;
 
+import static java.util.UUID.randomUUID;
+
 @Component
 @AllArgsConstructor
 public class TransactionMapper {
@@ -18,7 +20,7 @@ public class TransactionMapper {
         null,
         rest.getDate(),
         toDomain(rest.getTransactionType()),
-        rest.getWalletReference(),
+        rest.getWalletReference() + "-" + randomUUID(),
         rest.getAmount(),
         rest.getLabels().stream()
             .map(
