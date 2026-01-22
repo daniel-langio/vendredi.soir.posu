@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import vendredi.soir.posu.endpoint.rest.model.TransactionMinimalInfo;
 import vendredi.soir.posu.model.Transaction;
+import vendredi.soir.posu.model.User;
 import vendredi.soir.posu.repository.LabelRepository;
 
 @Component
@@ -13,7 +14,7 @@ public class TransactionMapper {
   private final LabelRepository labelRepository;
   private final LabelMapper labelMapper;
 
-  public Transaction toDomain(TransactionMinimalInfo rest) {
+  public Transaction toDomain(TransactionMinimalInfo rest, User user) {
     return new Transaction(
         null,
         rest.getDate(),
@@ -24,7 +25,7 @@ public class TransactionMapper {
             .map(
                 label ->
                     labelRepository
-                        .findByReference(label)
+                        .findByReferenceAndUser(label, user)
                         .orElseThrow(
                             () -> new IllegalArgumentException("Label not found: " + label)))
             .collect(Collectors.toList()),

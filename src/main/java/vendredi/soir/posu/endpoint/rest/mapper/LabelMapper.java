@@ -7,8 +7,10 @@ import vendredi.soir.posu.endpoint.rest.model.LabelMinimalInfo;
 @Component
 public class LabelMapper {
   public vendredi.soir.posu.model.Label toDomain(LabelMinimalInfo rest) {
-    return new vendredi.soir.posu.model.Label(
-        null, rest.getName(), rest.getReference(), null, null);
+    return vendredi.soir.posu.model.Label.builder()
+        .name(rest.getName())
+        .reference(rest.getReference())
+        .build();
   }
 
   public Label toRest(vendredi.soir.posu.model.Label domain) {
