@@ -27,7 +27,7 @@ public class Wallet {
 
   private String name;
 
-  @Column(unique = true, nullable = false)
+  @Column(nullable = false)
   private String reference;
 
   @Enumerated(EnumType.STRING)
