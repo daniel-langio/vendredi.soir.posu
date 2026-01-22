@@ -9,9 +9,9 @@ import vendredi.soir.posu.model.Wallet;
 
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, String> {
-  Optional<Wallet> findByReference(String reference);
+  Optional<Wallet> findByReferenceAndUsersContaining(String reference, User user);
 
-  boolean existsByReference(String reference);
+  boolean existsByReferenceAndUsersContaining(String reference, User user);
 
   List<Wallet> findByUsersContaining(User user);
 }

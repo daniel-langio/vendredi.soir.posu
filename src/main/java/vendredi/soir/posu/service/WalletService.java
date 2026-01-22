@@ -24,7 +24,8 @@ public class WalletService {
             .map(walletMapper::toDomain)
             .peek(
                 wallet -> {
-                  if (walletRepository.existsByReference(wallet.getReference())) {
+                  if (walletRepository.existsByReferenceAndUsersContaining(
+                      wallet.getReference(), currentUser)) {
                     throw new IllegalArgumentException(
                         "Wallet with reference " + wallet.getReference() + " already exists");
                   }
