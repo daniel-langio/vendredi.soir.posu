@@ -5,7 +5,6 @@ ALTER TABLE "transaction" DROP CONSTRAINT IF EXISTS transaction_wallet_reference
 ALTER TABLE "wallet" DROP CONSTRAINT IF EXISTS wallet_reference_uq;
 ALTER TABLE "wallet" DROP CONSTRAINT IF EXISTS wallet_name_key;
 
-
 -- Drop unique constraint on label reference
 -- Postgres default name for UNIQUE (reference) on table label
 ALTER TABLE "label" DROP CONSTRAINT IF EXISTS label_reference_key;
