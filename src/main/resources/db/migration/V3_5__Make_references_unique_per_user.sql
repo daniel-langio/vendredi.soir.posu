@@ -1,5 +1,9 @@
--- Drop unique constraint on wallet reference
+-- Drop foreign key that depends on wallet(reference) unique constraint
+ALTER TABLE "transaction" DROP CONSTRAINT IF EXISTS transaction_wallet_reference_fk;
+
+-- Drop unique constraint on wallet reference and name
 ALTER TABLE "wallet" DROP CONSTRAINT IF EXISTS wallet_reference_uq;
+ALTER TABLE "wallet" DROP CONSTRAINT IF EXISTS wallet_name_key;
 
 -- Drop unique constraint on label reference
 -- Postgres default name for UNIQUE (reference) on table label
