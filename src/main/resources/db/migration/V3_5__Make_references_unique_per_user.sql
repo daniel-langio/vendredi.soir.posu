@@ -1,3 +1,6 @@
+-- Drop foreign key that depends on wallet(reference) unique constraint
+ALTER TABLE "transaction" DROP CONSTRAINT IF EXISTS transaction_wallet_reference_fk;
+
 -- Drop unique constraint on wallet reference
 ALTER TABLE "wallet" DROP CONSTRAINT IF EXISTS wallet_reference_uq;
 
