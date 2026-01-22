@@ -28,16 +28,14 @@ public class TransactionService {
                 transaction -> {
                   Wallet wallet =
                       walletRepository
-                          .findByReference(transaction.getWalletReference())
+                          .findByReferenceAndUsersContaining(
+                              transaction.getWalletReference(), currentUser)
                           .orElseThrow(
                               () ->
                                   new IllegalArgumentException(
-                                      "Wallet not found: " + transaction.getWalletReference()));
-                  if (!wallet.getUsers().contains(currentUser)) {
-                    throw new IllegalArgumentException(
-                        "Wallet " + transaction.getWalletReference() + " does not belong to user");
-                  }
-                  return transactionMapper.toDomain(transaction);
+                                      "Wallet not found or does not belong to user: "
+                                          + transaction.getWalletReference()));
+                  return transactionMapper.toDomain(transaction, currentUser);
                 })
             .collect(Collectors.toList());
     return transactionRepository.saveAll(toSave);
