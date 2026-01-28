@@ -1,7 +1,9 @@
 package vendredi.soir.posu.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "\"user\"")
@@ -27,4 +29,8 @@ public class User {
 
   @Column(unique = true, nullable = false)
   private String apiKey;
+
+  @Column(nullable = false)
+  @CreationTimestamp
+  private Instant creationDatetime;
 }

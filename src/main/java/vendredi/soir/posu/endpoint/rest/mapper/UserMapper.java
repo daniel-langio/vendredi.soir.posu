@@ -11,6 +11,7 @@ public class UserMapper {
         .id(domain.getId())
         .username(domain.getUsername())
         .email(domain.getEmail())
+        .creationDatetime(domain.getCreationDatetime())
         .build();
   }
 
@@ -20,6 +21,7 @@ public class UserMapper {
         .username(domain.getUsername())
         .email(domain.getEmail())
         .apiKey(domain.getApiKey())
+        .creationDatetime(domain.getCreationDatetime())
         .build();
   }
 }
