@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS wallet(
     reference VARCHAR
 );
 
-INSERT INTO wallet(name, reference) VALUES ('LIQUIDE', 'DEFAULT_LIQUIDE');
+INSERT INTO wallet(name, reference) VALUES ('LIQUIDE', 'DEFAULT_LIQUIDE') ON CONFLICT (name) DO NOTHING;
