@@ -28,5 +28,6 @@ public class UserControllerIT extends FacadeIT {
     assertEquals(username, response.getUsername());
     assertEquals(username + "@example.com", response.getEmail());
     assertNotNull(response.getApiKey());
+    assertNotNull(response.getCreationDatetime());
   }
 }

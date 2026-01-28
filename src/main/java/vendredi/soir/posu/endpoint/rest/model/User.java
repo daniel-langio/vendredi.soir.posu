@@ -1,5 +1,6 @@
 package vendredi.soir.posu.endpoint.rest.model;
 
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,4 +14,5 @@ public class User {
   private String id;
   private String username;
   private String email;
+  private Instant creationDatetime;
 }
