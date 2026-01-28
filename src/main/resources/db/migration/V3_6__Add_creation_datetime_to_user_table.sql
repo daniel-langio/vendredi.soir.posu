@@ -1,1 +1,1 @@
-ALTER TABLE "user" ADD COLUMN creation_datetime timestamp with time zone NOT NULL DEFAULT now();
+ALTER TABLE "user" ADD COLUMN IF NOT EXISTS creation_datetime timestamp with time zone NOT NULL DEFAULT now();

@@ -10,7 +10,7 @@ ALTER TABLE "wallet" DROP CONSTRAINT IF EXISTS wallet_name_key;
 ALTER TABLE "label" DROP CONSTRAINT IF EXISTS label_reference_key;
 
 -- Add user_id to label
-ALTER TABLE "label" ADD COLUMN user_id VARCHAR(255) REFERENCES "user"(id);
+ALTER TABLE "label" ADD COLUMN IF NOT EXISTS user_id VARCHAR(255) REFERENCES "user"(id);
 
 -- Assign existing labels to the first user found, if any
 DO $$
@@ -24,4 +24,11 @@ BEGIN
 END $$;
 
 -- Add unique constraint on (user_id, reference) for label
-ALTER TABLE "label" ADD CONSTRAINT label_user_id_reference_uq UNIQUE (user_id, reference);
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'label_user_id_reference_uq'
+    ) THEN
+        ALTER TABLE "label" ADD CONSTRAINT label_user_id_reference_uq UNIQUE (user_id, reference);
+    END IF;
+END$$;
