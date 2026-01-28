@@ -1,2 +1,6 @@
-DROP TYPE IF EXISTS transaction_type;
-CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'transaction_type') THEN
+        CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
+    END IF;
+END$$;
