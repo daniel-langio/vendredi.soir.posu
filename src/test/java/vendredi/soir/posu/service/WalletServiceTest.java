@@ -18,6 +18,7 @@ import vendredi.soir.posu.endpoint.rest.mapper.WalletMapper;
 import vendredi.soir.posu.endpoint.rest.model.WalletMinimalInfo;
 import vendredi.soir.posu.model.User;
 import vendredi.soir.posu.model.Wallet;
+import vendredi.soir.posu.model.exception.ConflictException;
 import vendredi.soir.posu.repository.WalletRepository;
 
 class WalletServiceTest {
@@ -68,6 +69,6 @@ class WalletServiceTest {
     when(walletMapper.toDomain(info)).thenReturn(wallet);
     when(walletRepository.existsByReferenceAndUsersContaining("REF1", user)).thenReturn(true);
 
-    assertThrows(IllegalArgumentException.class, () -> walletService.createWallets(List.of(info)));
+    assertThrows(ConflictException.class, () -> walletService.createWallets(List.of(info)));
   }
 }

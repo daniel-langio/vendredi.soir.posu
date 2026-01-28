@@ -20,15 +20,11 @@ public class WalletController {
 
   @PostMapping
   public ResponseEntity<List<Wallet>> createWallet(@RequestBody List<WalletMinimalInfo> wallets) {
-    try {
-      List<Wallet> createdWallets =
-          walletService.createWallets(wallets).stream()
-              .map(walletMapper::toRest)
-              .collect(Collectors.toList());
-      return ResponseEntity.status(HttpStatus.CREATED).body(createdWallets);
-    } catch (IllegalArgumentException e) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).build();
-    }
+    List<Wallet> createdWallets =
+        walletService.createWallets(wallets).stream()
+            .map(walletMapper::toRest)
+            .collect(Collectors.toList());
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdWallets);
   }
 
   @GetMapping

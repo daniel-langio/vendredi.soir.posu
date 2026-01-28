@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import vendredi.soir.posu.endpoint.rest.model.TransactionMinimalInfo;
 import vendredi.soir.posu.model.Transaction;
 import vendredi.soir.posu.model.User;
+import vendredi.soir.posu.model.exception.NotFoundException;
 import vendredi.soir.posu.repository.LabelRepository;
 
 @Component
@@ -27,7 +28,7 @@ public class TransactionMapper {
                     labelRepository
                         .findByReferenceAndUser(label, user)
                         .orElseThrow(
-                            () -> new IllegalArgumentException("Label not found: " + label)))
+                            () -> new NotFoundException("Label not found: " + label)))
             .collect(Collectors.toList()),
         rest.getDescription(),
         null,

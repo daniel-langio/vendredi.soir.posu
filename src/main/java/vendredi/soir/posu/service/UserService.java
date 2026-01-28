@@ -11,6 +11,8 @@ import vendredi.soir.posu.endpoint.rest.model.RegisterRequest;
 import vendredi.soir.posu.model.User;
 import vendredi.soir.posu.model.Wallet;
 import vendredi.soir.posu.model.WalletType;
+import vendredi.soir.posu.model.exception.ConflictException;
+import vendredi.soir.posu.model.exception.ForbiddenException;
 import vendredi.soir.posu.repository.UserRepository;
 import vendredi.soir.posu.repository.WalletRepository;
 
@@ -24,10 +26,10 @@ public class UserService {
   @Transactional
   public User register(RegisterRequest request) {
     if (userRepository.existsByUsername(request.getUsername())) {
-      throw new IllegalArgumentException("Username already exists");
+      throw new ConflictException("Username already exists");
     }
     if (userRepository.existsByEmail(request.getEmail())) {
-      throw new IllegalArgumentException("Email already exists");
+      throw new ConflictException("Email already exists");
     }
 
     User user =
@@ -61,6 +63,6 @@ public class UserService {
     return userRepository
         .findByUsername(request.getUsername())
         .filter(user -> passwordEncoder.matches(request.getPassword(), user.getPassword()))
-        .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+        .orElseThrow(() -> new ForbiddenException("Invalid username or password"));
   }
 }

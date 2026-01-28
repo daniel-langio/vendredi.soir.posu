@@ -10,6 +10,7 @@ import vendredi.soir.posu.endpoint.rest.model.TransactionMinimalInfo;
 import vendredi.soir.posu.model.Transaction;
 import vendredi.soir.posu.model.User;
 import vendredi.soir.posu.model.Wallet;
+import vendredi.soir.posu.model.exception.NotFoundException;
 import vendredi.soir.posu.repository.TransactionRepository;
 import vendredi.soir.posu.repository.WalletRepository;
 
@@ -32,7 +33,7 @@ public class TransactionService {
                               transaction.getWalletReference(), currentUser)
                           .orElseThrow(
                               () ->
-                                  new IllegalArgumentException(
+                                  new NotFoundException(
                                       "Wallet not found or does not belong to user: "
                                           + transaction.getWalletReference()));
                   return transactionMapper.toDomain(transaction, currentUser);
