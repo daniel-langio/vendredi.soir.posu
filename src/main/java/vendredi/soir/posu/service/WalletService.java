@@ -9,6 +9,7 @@ import vendredi.soir.posu.endpoint.rest.mapper.WalletMapper;
 import vendredi.soir.posu.endpoint.rest.model.WalletMinimalInfo;
 import vendredi.soir.posu.model.User;
 import vendredi.soir.posu.model.Wallet;
+import vendredi.soir.posu.model.exception.ConflictException;
 import vendredi.soir.posu.repository.WalletRepository;
 
 @Service
@@ -26,7 +27,7 @@ public class WalletService {
                 wallet -> {
                   if (walletRepository.existsByReferenceAndUsersContaining(
                       wallet.getReference(), currentUser)) {
-                    throw new IllegalArgumentException(
+                    throw new ConflictException(
                         "Wallet with reference " + wallet.getReference() + " already exists");
                   }
                   wallet.setUsers(List.of(currentUser));

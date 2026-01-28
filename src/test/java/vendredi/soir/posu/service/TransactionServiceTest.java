@@ -20,6 +20,7 @@ import vendredi.soir.posu.endpoint.rest.model.TransactionMinimalInfo;
 import vendredi.soir.posu.model.Transaction;
 import vendredi.soir.posu.model.User;
 import vendredi.soir.posu.model.Wallet;
+import vendredi.soir.posu.model.exception.NotFoundException;
 import vendredi.soir.posu.repository.TransactionRepository;
 import vendredi.soir.posu.repository.WalletRepository;
 
@@ -70,6 +71,6 @@ class TransactionServiceTest {
 
     when(walletRepository.findByReferenceAndUsersContaining("W1", user)).thenReturn(Optional.empty());
 
-    assertThrows(IllegalArgumentException.class, () -> transactionService.recordTransactions(List.of(info)));
+    assertThrows(NotFoundException.class, () -> transactionService.recordTransactions(List.of(info)));
   }
 }

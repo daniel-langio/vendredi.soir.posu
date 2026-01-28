@@ -9,6 +9,7 @@ import vendredi.soir.posu.endpoint.rest.mapper.LabelMapper;
 import vendredi.soir.posu.endpoint.rest.model.LabelMinimalInfo;
 import vendredi.soir.posu.model.Label;
 import vendredi.soir.posu.model.User;
+import vendredi.soir.posu.model.exception.ConflictException;
 import vendredi.soir.posu.repository.LabelRepository;
 
 @Service
@@ -25,7 +26,7 @@ public class LabelService {
             .peek(
                 label -> {
                   if (labelRepository.existsByReferenceAndUser(label.getReference(), currentUser)) {
-                    throw new IllegalArgumentException(
+                    throw new ConflictException(
                         "Label with reference " + label.getReference() + " already exists");
                   }
                   label.setUser(currentUser);

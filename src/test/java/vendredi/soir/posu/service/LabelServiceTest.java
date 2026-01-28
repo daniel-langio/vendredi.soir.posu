@@ -18,6 +18,7 @@ import vendredi.soir.posu.endpoint.rest.mapper.LabelMapper;
 import vendredi.soir.posu.endpoint.rest.model.LabelMinimalInfo;
 import vendredi.soir.posu.model.Label;
 import vendredi.soir.posu.model.User;
+import vendredi.soir.posu.model.exception.ConflictException;
 import vendredi.soir.posu.repository.LabelRepository;
 
 class LabelServiceTest {
@@ -68,7 +69,7 @@ class LabelServiceTest {
     when(labelMapper.toDomain(info)).thenReturn(label);
     when(labelRepository.existsByReferenceAndUser("REF1", user)).thenReturn(true);
 
-    assertThrows(IllegalArgumentException.class, () -> labelService.createLabels(List.of(info)));
+    assertThrows(ConflictException.class, () -> labelService.createLabels(List.of(info)));
   }
 
   @Test
